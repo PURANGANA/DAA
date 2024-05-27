@@ -1,44 +1,36 @@
 #include <stdio.h>
- 
-int max(int a, int b) { return (a > b)? a : b; }
-
-int knapsack(int W, int wt[], int val[], int n)
+int max(int a, int b) { return (a > b) ? a : b; }
+int knapSack(int W, int wt[], int val[], int n)
 {
-   int i, w;
-   int K[n+1][W+1];
- 
-   for (i = 0; i <= n; i++)
-   {
-       for (w = 0; w <= W; w++)
-       {
-           if (i==0 || w==0)
-               K[i][w] = 0;
-           else if (wt[i-1] <= w)
-                 K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
-           else
-                 K[i][w] = K[i-1][w];
-       }
-   }
- 
-   return K[n][W];
+    if (n == 0 || W == 0)
+        return 0;
+
+    if (wt[n - 1] > W)
+        return knapSack(W, wt, val, n - 1);
+
+    else
+        return max(
+            val[n - 1]
+                + knapSack(W - wt[n - 1], wt, val, n - 1),
+            knapSack(W, wt, val, n - 1));
 }
- 
+
 int main()
 {
-   
-int n,W,wt[10],val[10],i;
-printf("Enter no. of objects:");
-scanf("%d",&n);
-printf("Enter the cost of objects:");
+    int profit[20], weight[20], W, n, i; 
+	printf("Enter no. of objects:");
+	scanf("%d",&n);
+    printf("Enter the profit of objects:");//{ 60, 100, 120 }
 for(i=0;i<n;i++){
-	scanf("%d",&wt[i]);
+	scanf("%d",&profit[i]);
 }
-printf("Enter the value of objects:");
+printf("Enter the weight of objects:");//{ 10, 20, 30 }
 for(i=0;i<n;i++){
-	scanf("%d",&val[i]);
+	scanf("%d",&weight[i]);
 }
 printf("Enter max weight:");
 scanf("%d",&W);
-printf("\nValue = %d", knapsack(W, wt, val, n));
-return 0;
+   
+    printf("Value = %d", knapSack(W, weight, profit, n));
+    return 0;
 }
